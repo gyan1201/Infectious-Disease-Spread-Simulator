@@ -1,73 +1,44 @@
-# React + TypeScript + Vite
+# 🦠 Infectious Disease Spread Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An Agent-Based Simulation for Infectious Disease Spread, built on the research paper: **"An Infectious Disease Spread Simulation Based on Large Language Model Decision Making"**.
 
-Currently, two official plugins are available:
+## 🚀 Live Deployments
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Interactive Streamlit Dashboard:** [View Simulation Results](https://infectious-disease-spread-simulator-7wcalmebfennsr5mrxmlaf.streamlit.app/)
+- **Project Frontend:** [View Project Page](https://gyan1201.github.io/Infectious-Disease-Spread-Simulator/)
+- **Build Tutorial:** [View Tutorial](https://gyan1201.github.io/Infectious-Disease-Spread-Simulator/tutorial-webpage/)
 
-## React Compiler
+## 📖 About the Project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+This project simulates the spread of infectious diseases using Large Language Models (LLMs) to model human decision-making behavior. It combines a robust **Java/MASON** simulation backend with a modern **Python/Streamlit** visualization dashboard.
 
-## Expanding the ESLint configuration
+### Features
+- Agent-Based Modeling using the MASON framework.
+- SEIR disease models enhanced by LLM-driven agent interactions.
+- Dynamic choropleth mapping for localized simulation tracking (e.g., Atlanta, San Francisco).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Local Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Java Backend Simulator
+To run the underlying simulation, you need Java 17 and Maven:
+```bash
+cd disease-simulator-LLM_agent
+mvn clean compile assembly:single
+java -Dlog4j2.configurationFactory=edu.gmu.mason.vanilla.log.CustomConfigurationFactory \
+     -Dlog.rootDirectory=logs \
+     -Dfile.prefix=gui-run \
+     -Dsimulation.test=bias \
+     -jar target/vanilla-0.1-jar-with-dependencies.jar \
+     -configuration examples/atlanta.properties \
+     -bias.config examples/bias.llm.properties \
+     -bias.single.config examples/bias.single.properties \
+     -until 25920
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Streamlit Dashboard
+The Streamlit app visualizes the simulation logs. You can run it locally with Python:
+```bash
+cd disease-simulator-LLM_agent
+pip install -r ../requirements.txt
+streamlit run gui/app.py
 ```
