@@ -1,0 +1,102 @@
+#
+# Project specific excludes
+#
+
+tomcat
+
+#
+# Default excludes
+#
+
+# Binaries
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.war
+*.ear
+*.sar
+*.class
+
+# Maven 
+target/
+
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
+.idea/
+
+# eclipse project file
+.settings/
+.classpath
+.project
+
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# vscode specific
+.vscode/
+
+# hossein specific
+*.scratch.txt
+
+
+# OS
+.DS_Store
+
+# Claude Code local guidance (not for public repo)
+CLAUDE.md
+
+# GUI runtime state
+.sim_pid
+.sim_state.json
+
+# Temp simulation property files
+tmp*.properties
+
+# Misc
+*.swp
+release.properties
+pom.xml.releaseBackup
+pom.xml.tag
+*.serialized
+
+# Log files (ignore run outputs, but keep gui-run/ as a tracked example folder)
+logs/*
+!logs/.gitkeep
+!logs/gui-run/
+qois/
+*.log
+*.checkpoint
+
+# Simulation output (too large for git)
+examples/logs/
+
+# Extracted map shapefiles (unpacked from JAR at runtime)
+/atlanta/
+/san-fran/
+/gz-tianhe/
+
+# Windows Zone.Identifier ADS files
+*:Zone.Identifier
+*Zone.Identifier
+*.ipynd_checkpoint
+*.dgs
+
+# batch files
+batch/
+
+# Exception
+!src/**/*.jar
+!src/**/batch/

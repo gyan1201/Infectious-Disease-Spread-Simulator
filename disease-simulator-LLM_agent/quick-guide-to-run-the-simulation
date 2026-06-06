@@ -1,0 +1,97 @@
+# Quick Guide to Run the Simulation
+
+This guide covers building and running the LLM-decision-bank version of the disease simulator,
+and viewing results in the Streamlit GUI.
+
+---
+
+## Prerequisites
+
+- Java 8 (JDK), Maven 3.x
+- Python 3.9+ with conda (for the GUI)
+
+---
+
+## Step 1 — Clone and install local JARs
+
+```bash
+git clone <repo-url>
+cd disease-simulator-main
+```
+
+Install the four bundled JARs into your local Maven repository (only needed once):
+
+```bash
+mvn install:install-file -Dfile=src/main/resources/libs/jts-1.13.1.jar       -DgroupId=com.vividsolutions -DartifactId=jts          -Dversion=1.13.1 -Dpackaging=jar
+mvn install:install-file -Dfile=src/main/resources/libs/geomason-1.5.2.jar   -DgroupId=sim.util.geo      -DartifactId=geomason      -Dversion=1.5.2  -Dpackaging=jar
+mvn install:install-file -Dfile=src/main/resources/libs/mason-19.jar          -DgroupId=sim               -DartifactId=mason         -Dversion=19     -Dpackaging=jar
+mvn install:install-file -Dfile=src/main/resources/libs/mason-tools-1.0.jar   -DgroupId=at.granul         -DartifactId=mason-tools   -Dversion=1.0    -Dpackaging=jar
+```
+
+> **Note:** The path to the project folder must not contain spaces or special characters.
+
+---
+
+## Step 2 — Build
+
+```bash
+mvn org.apache.maven.plugins:maven-resources-plugin:2.6:resources \
+  org.apache.maven.plugins:maven-compiler-plugin:3.1:compile \
+  org.apache.maven.plugins:maven-assembly-plugin:3.1.0:single
+```
+
+Output: `target/vanilla-0.1-jar-with-dependencies.jar`
+
+---
+
+## Step 3 — Run the simulation
+
+**Linux / macOS / Git Bash:**
+
+```bash
+bash run.sh [log-prefix] [days]
+# e.g.:
+bash run.sh atl-s1 60
+```
+
+**Windows CMD:**
+
+```bat
+run.bat [log-prefix] [days]
+rem e.g.:
+run.bat atl-s1 60
+```
+
+Both scripts default to `atl-test` / 90 days and write output to `logs/<prefix>/`.
+
+To run with a different decision bank (scenario) or city, edit the relevant lines in
+`run.sh` / `run.bat`, or pass the full `java` command manually (see `README.md` for all flags).
+
+Key output files written to `logs/<prefix>/`:
+- `DiseaseReports.tsv` — per-infection events used by the GUI
+- `AgentCharacteristicsTable.tsv` — per-agent demographics and LLM keys
+
+---
+
+## Step 4 — View results in the GUI
+
+Set up the conda environment (only needed once):
+
+```bash
+conda create -n disease-sim-gui python=3.10 -y
+conda activate disease-sim-gui
+pip install -r gui/requirements.txt
+```
+
+Launch the GUI:
+
+```bash
+conda activate disease-sim-gui
+streamlit run gui/app.py
+```
+
+In the browser:
+1. **Run** tab — select output folder, set simulation days, click **Run Simulation**.
+2. **Results** tab — browse SEIR curves and the reporting-rate choropleth map per day.
+
+To add a new city map to the GUI, see `documentaion/gui-map.md`.
