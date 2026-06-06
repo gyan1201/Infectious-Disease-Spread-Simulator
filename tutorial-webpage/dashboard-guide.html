@@ -16,6 +16,7 @@
             --glass-bg: rgba(30, 41, 59, 0.7);
             --glass-border: rgba(255, 255, 255, 0.1);
             --code-bg: #1e293b;
+            --highlight: #f59e0b;
         }
 
         body {
@@ -31,9 +32,10 @@
                 radial-gradient(circle at 15% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
         }
 
-        h1, h2, h3 {
+        h1, h2, h3, h4 {
             font-weight: 800;
             line-height: 1.2;
+            margin-top: 0;
         }
 
         h1 {
@@ -50,7 +52,7 @@
             color: var(--text-muted);
             font-size: 1.2rem;
             margin-bottom: 3rem;
-            max-width: 600px;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -76,11 +78,13 @@
             color: var(--text-main);
             text-decoration: none;
             transition: all 0.2s;
+            font-weight: 600;
         }
 
         .nav-links a:hover {
             background: var(--primary);
             border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
         .card {
@@ -105,7 +109,6 @@
             align-items: center;
             gap: 1rem;
             color: var(--secondary);
-            margin-top: 0;
             border-bottom: 1px solid var(--glass-border);
             padding-bottom: 1rem;
             margin-bottom: 1.5rem;
@@ -114,13 +117,13 @@
         .step-number {
             background: var(--primary);
             color: white;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
             box-shadow: 0 0 15px var(--primary-glow);
             flex-shrink: 0;
         }
@@ -140,6 +143,40 @@
 
         li {
             margin-bottom: 0.8rem;
+        }
+        
+        .ui-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .ui-element {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+        }
+
+        .ui-element h4 {
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ui-badge {
+            background: var(--code-bg);
+            border: 1px solid var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 1rem;
         }
 
         .hero-section {
@@ -165,6 +202,11 @@
             border-radius: 0 0.5rem 0.5rem 0;
             margin: 1.5rem 0;
         }
+        
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: var(--highlight);
+        }
     </style>
 </head>
 <body>
@@ -176,49 +218,76 @@
     </div>
 
     <div class="hero-section">
-        <h1>Dashboard Usage Guide</h1>
-        <p class="subtitle">A step-by-step guide on how to interact with the Python Streamlit simulation dashboard.</p>
+        <h1>Dashboard UI Guide</h1>
+        <p class="subtitle">A comprehensive walkthrough of the Streamlit interface, explaining how to tweak parameters, run agent-based models, and interpret the geographic disease reports.</p>
     </div>
 
     <div class="card">
-        <h2>About the Dashboard</h2>
-        <p>The dashboard allows you to simulate how a disease spreads through a city based on how people (agents) behave and make decisions. It interacts directly with the Java Agent-Based Modeling backend to run virtual pandemic scenarios.</p>
-    </div>
-
-    <div class="card">
-        <h2><span class="step-number">1</span> Configure & Run a Simulation</h2>
-        <p>When you first open the dashboard, you will be on the <strong>Configure & Run</strong> tab. This is where you set the rules for your virtual pandemic.</p>
-        <ul>
-            <li><strong>Pick a City:</strong> Choose either Atlanta or San Francisco. This changes the geographic map and the population density.</li>
-            <li><strong>Choose a Scenario (LLM Bias):</strong> The simulation models different types of human behaviors:
+        <h2><span class="step-number">⚙️</span> Tab 1: Configure & Run</h2>
+        <p>The <strong>Configure & Run</strong> tab is the control center for your virtual pandemic. Here, you define the environment, human behavior models, and biological parameters of the disease before launching the Java backend.</p>
+        
+        <div class="ui-grid">
+            <div class="ui-element">
+                <h4>🏙️ Scenario Settings</h4>
+                <p>Define the physical rules and behavioral AI driving the agents.</p>
                 <ul>
-                    <li><em>S1 - Independent:</em> Agents make decisions on their own.</li>
-                    <li><em>S2 - Household Influence:</em> Agents copy what their family members are doing.</li>
-                    <li><em>S3 - Message Framing:</em> Agents react differently based on how news/warnings are framed.</li>
+                    <li><strong>City:</strong> Choose <em>Atlanta</em> or <em>San Francisco</em>. This changes the geographic boundaries, population density, and available locations for agents to travel to.</li>
+                    <li><strong>Reporting Model:</strong> Choose <em>LLM</em> (Large Language Model simulating complex human choices) or <em>LR</em> (Logistic Regression for basic probability).</li>
+                    <li><strong>Scenario (LLM only):</strong> Select behavioral biases. <em>S1 (Independent)</em> makes agents act purely on logic. <em>S2 (Household)</em> makes agents mimic family. <em>S3 (Framing)</em> changes how agents react to severe vs mild news.</li>
                 </ul>
-            </li>
-            <li><strong>Adjust the Parameters:</strong> You can set the number of people in the city, how many days the simulation lasts, and how easily the disease spreads (SEIR parameters).</li>
-            <li><strong>Click "Run Simulation":</strong> Hit the big red button! The server will start running the Java backend to simulate thousands of people interacting. Wait for the green success message.</li>
-        </ul>
-        <div class="alert">
-            <strong>Note:</strong> By default, the simulation saves the log prefix as <span class="inline-code">gui-run</span>. Remember this prefix for the next step!
+            </div>
+            
+            <div class="ui-element">
+                <h4>🦠 Disease Parameters (SEIR)</h4>
+                <p>Define the epidemiological rules of the virus.</p>
+                <ul>
+                    <li><strong>Initial infectious (%):</strong> How much of the population starts with the virus on Day 0.</li>
+                    <li><strong>P(test positive | symptomatic):</strong> The probability an agent decides to get tested when showing symptoms. Lower values simulate testing scarcity.</li>
+                    <li><strong>P(clinical diagnosis):</strong> The probability a doctor correctly identifies the disease without a perfect lab test.</li>
+                    <li><strong>Simulation duration:</strong> How many days the virtual pandemic will last. Longer durations take longer to simulate.</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="alert alert-warning">
+            <strong>Running the Simulation:</strong> Once you click the red <strong>"Run Simulation"</strong> button, the Streamlit server launches a background Java process. A yellow banner will appear at the top displaying the Process ID (PID). Wait for the green success message before moving to the Results tab.
         </div>
     </div>
 
     <div class="card">
-        <h2><span class="step-number">2</span> View the Results</h2>
-        <p>Once the simulation finishes running, click on the <strong>"Results"</strong> tab at the top of the page to analyze the geographic spread.</p>
+        <h2><span class="step-number">📊</span> Tab 2: Results & Analysis</h2>
+        <p>The <strong>Results</strong> tab visualizes the complex data generated by the simulation. It parses the <span class="inline-code">DiseaseReports.tsv</span> file into interactive geographic maps and time-series charts.</p>
+        
+        <div class="ui-badge">Step-by-Step UI Breakdown</div>
+
+        <h3>1. The Data Selector</h3>
+        <p>At the top of the tab, use the <strong>Select run</strong> dropdown to choose the data you want to view. By default, it will load the simulation you just finished (e.g., <span class="inline-code">gui-run</span>). You can also select the pre-computed <span class="inline-code">examples/</span> to view instant results without waiting for a simulation.</p>
+
+        <h3>2. The Time Machine (Day Navigation)</h3>
+        <p>The simulation logs data in 5-minute increments, aggregated into days. Use the slider or the <strong>Next/Prev</strong> buttons to scrub through the timeline of the pandemic.</p>
         <ul>
-            <li><strong>Select your run:</strong> In the dropdown menu, select <span class="inline-code">gui-run</span> (or whatever you named your log prefix) to load the data you just generated. <em>You can also select one of the <span class="inline-code">examples/</span> to see pre-generated data!</em></li>
-            <li><strong>Use the Time Slider:</strong> Use the "Day" slider (or Next/Prev buttons) to travel through time. You will see the total numbers update for Susceptible, Exposed, Infectious, and Recovered agents for that specific day.</li>
-            <li><strong>Explore the Maps:</strong> 
-                <ul>
-                    <li><strong>SEIR Map:</strong> Shows the concentration of infected people across different neighborhoods on the map.</li>
-                    <li><strong>Reporting Map:</strong> Shows which neighborhoods actually reported being sick (simulating real-world testing gaps and reluctance).</li>
-                </ul>
-            </li>
-            <li><strong>Analyze the Chart:</strong> The line chart at the bottom shows the classic pandemic "curve" over the entire simulation period.</li>
+            <li>As you drag the slider, the <strong>Top KPI Metrics</strong> (Susceptible, Exposed, Infectious, Recovered) will instantly update to show the exact population stats for that specific day.</li>
+            <li>The map below will also dynamically recolor based on the day you select.</li>
         </ul>
+
+        <h3>3. Interactive Geographic Maps</h3>
+        <p>There are two primary map views you can toggle between using sub-tabs:</p>
+        <div class="ui-grid">
+            <div class="ui-element">
+                <h4>🗺️ SEIR Choropleth Map</h4>
+                <p>This map shows the raw biological truth of the disease spread across different city regions.</p>
+                <p>Use the <strong>"Color by"</strong> dropdown to switch between viewing Infectious (Red gradient) or Susceptible (Blue gradient) agents. Hover your mouse over any neighborhood to see a popup tooltip containing the exact breakdown of agents in that specific region.</p>
+            </div>
+            
+            <div class="ui-element">
+                <h4>📢 Reporting Rate Map</h4>
+                <p>This map shows the <em>human behavior</em> side of the simulation. It calculates the percentage of agents who actually reported their illness to the health system.</p>
+                <p>Formula: <span class="inline-code">(Agents who reported / Total infected agents) * 100</span>. Darker red indicates neighborhoods with higher compliance and testing rates.</p>
+            </div>
+        </div>
+
+        <h3>4. The Pandemic Curve (Line Chart)</h3>
+        <p>At the bottom of the screen (or to the right of the map on large screens), you will find the cumulative line chart. This visualizes the classic "Flatten the Curve" graph, tracking the total number of Exposed, Infectious, and Recovered agents over the entire duration of the simulation.</p>
     </div>
 
 </div>
