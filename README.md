@@ -1,14 +1,14 @@
-# 🦠 Infectious Disease Spread Simulator
+#  Infectious Disease Spread Simulator
 
 An Agent-Based Simulation for Infectious Disease Spread, built on the research paper: **"An Infectious Disease Spread Simulation Based on Large Language Model Decision Making"**.
 
-## 🚀 Live Deployments
+##  Live Deployments
 
 - **Interactive Streamlit Dashboard:** [View Simulation Results](https://infectious-disease-spread-simulator-7wcalmebfennsr5mrxmlaf.streamlit.app/)
 - **Project Frontend:** [View Project Page](https://gyan1201.github.io/Infectious-Disease-Spread-Simulator/)
 - **Build Tutorial:** [View Tutorial](https://gyan1201.github.io/Infectious-Disease-Spread-Simulator/tutorial-webpage/)
 
-## 📖 About the Project
+##  About the Project
 
 This project simulates the spread of infectious diseases using Large Language Models (LLMs) to model human decision-making behavior. It combines a robust **Java/MASON** simulation backend with a modern **Python/Streamlit** visualization dashboard.
 
@@ -17,7 +17,7 @@ This project simulates the spread of infectious diseases using Large Language Mo
 - SEIR disease models enhanced by LLM-driven agent interactions.
 - Dynamic choropleth mapping for localized simulation tracking (e.g., Atlanta, San Francisco).
 
-## 🛠️ Local Development
+##  Local Development
 
 ### 1. Java Backend Simulator
 To run the underlying simulation, you need Java 17 and Maven:
