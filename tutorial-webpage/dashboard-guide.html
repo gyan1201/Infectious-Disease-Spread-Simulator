@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamlit Dashboard Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #10b981;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 85% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 15% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+        }
+
+        h1, h2, h3 {
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .nav-links a {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0 0.5rem;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--secondary);
+            margin-top: 0;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+            flex-shrink: 0;
+        }
+
+        .inline-code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #93c5fd;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+        }
+        
+        .alert {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav-links">
+        <a href="index.html">← Back to Build Tutorial</a>
+        <a href="https://infectious-disease-spread-simulator-7wcalmebfennsr5mrxmlaf.streamlit.app/" target="_blank">Open Live Dashboard ↗</a>
+    </div>
+
+    <div class="hero-section">
+        <h1>Dashboard Usage Guide</h1>
+        <p class="subtitle">A step-by-step guide on how to interact with the Python Streamlit simulation dashboard.</p>
+    </div>
+
+    <div class="card">
+        <h2>About the Dashboard</h2>
+        <p>The dashboard allows you to simulate how a disease spreads through a city based on how people (agents) behave and make decisions. It interacts directly with the Java Agent-Based Modeling backend to run virtual pandemic scenarios.</p>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">1</span> Configure & Run a Simulation</h2>
+        <p>When you first open the dashboard, you will be on the <strong>Configure & Run</strong> tab. This is where you set the rules for your virtual pandemic.</p>
+        <ul>
+            <li><strong>Pick a City:</strong> Choose either Atlanta or San Francisco. This changes the geographic map and the population density.</li>
+            <li><strong>Choose a Scenario (LLM Bias):</strong> The simulation models different types of human behaviors:
+                <ul>
+                    <li><em>S1 - Independent:</em> Agents make decisions on their own.</li>
+                    <li><em>S2 - Household Influence:</em> Agents copy what their family members are doing.</li>
+                    <li><em>S3 - Message Framing:</em> Agents react differently based on how news/warnings are framed.</li>
+                </ul>
+            </li>
+            <li><strong>Adjust the Parameters:</strong> You can set the number of people in the city, how many days the simulation lasts, and how easily the disease spreads (SEIR parameters).</li>
+            <li><strong>Click "Run Simulation":</strong> Hit the big red button! The server will start running the Java backend to simulate thousands of people interacting. Wait for the green success message.</li>
+        </ul>
+        <div class="alert">
+            <strong>Note:</strong> By default, the simulation saves the log prefix as <span class="inline-code">gui-run</span>. Remember this prefix for the next step!
+        </div>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">2</span> View the Results</h2>
+        <p>Once the simulation finishes running, click on the <strong>"Results"</strong> tab at the top of the page to analyze the geographic spread.</p>
+        <ul>
+            <li><strong>Select your run:</strong> In the dropdown menu, select <span class="inline-code">gui-run</span> (or whatever you named your log prefix) to load the data you just generated. <em>You can also select one of the <span class="inline-code">examples/</span> to see pre-generated data!</em></li>
+            <li><strong>Use the Time Slider:</strong> Use the "Day" slider (or Next/Prev buttons) to travel through time. You will see the total numbers update for Susceptible, Exposed, Infectious, and Recovered agents for that specific day.</li>
+            <li><strong>Explore the Maps:</strong> 
+                <ul>
+                    <li><strong>SEIR Map:</strong> Shows the concentration of infected people across different neighborhoods on the map.</li>
+                    <li><strong>Reporting Map:</strong> Shows which neighborhoods actually reported being sick (simulating real-world testing gaps and reluctance).</li>
+                </ul>
+            </li>
+            <li><strong>Analyze the Chart:</strong> The line chart at the bottom shows the classic pandemic "curve" over the entire simulation period.</li>
+        </ul>
+    </div>
+
+</div>
+
+</body>
+</html>

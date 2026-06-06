@@ -195,6 +195,29 @@
             height: 1px;
             background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
         }
+        
+        .nav-links {
+            text-align: center;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-links a {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            margin: 0 0.5rem;
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -203,6 +226,11 @@
     <div class="hero-section">
         <h1>Building the LLM Disease Simulator</h1>
         <p class="subtitle">A step-by-step technical guide to reproducing the "An Infectious Disease Spread Simulation Based on Large Language Model Decision Making" framework.</p>
+    </div>
+
+    <div class="nav-links">
+        <a href="dashboard-guide.html">Dashboard Usage Guide →</a>
+        <a href="https://infectious-disease-spread-simulator-7wcalmebfennsr5mrxmlaf.streamlit.app/" target="_blank">Open Live Dashboard ↗</a>
     </div>
 
     <div class="card">
