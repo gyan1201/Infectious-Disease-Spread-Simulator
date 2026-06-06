@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Disease Simulator Tutorial</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #10b981;
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --code-bg: #1e293b;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+        }
+
+        h1, h2, h3 {
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--secondary);
+            margin-top: 0;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            border: 1px solid var(--glass-border);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            color: #e2e8f0;
+        }
+
+        .inline-code {
+            background-color: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            color: #93c5fd;
+            font-size: 0.9em;
+        }
+
+        .alert {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 1rem 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+        }
+
+        .alert-title {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        a:hover {
+            color: #93c5fd;
+            text-decoration: underline;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-family: 'Outfit', sans-serif;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-glow), transparent);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero-section">
+        <h1>Building the LLM Disease Simulator</h1>
+        <p class="subtitle">A step-by-step technical guide to reproducing the "An Infectious Disease Spread Simulation Based on Large Language Model Decision Making" framework.</p>
+    </div>
+
+    <div class="card">
+        <h2>About the Project</h2>
+        <p>This project implements an Agent-Based Model (ABM) that simulates infectious disease spread using Large Language Models (LLMs) to dictate agent reporting behaviors. Built with <strong>GeoMason (Java)</strong> for spatial simulation and <strong>Streamlit (Python)</strong> for visualization.</p>
+        <p><strong>Core Components:</strong></p>
+        <ul>
+            <li><code>vanilla-0.1-jar-with-dependencies.jar</code>: The Java MASON backend engine simulating Atlanta.</li>
+            <li><code>DecisionBank.csv</code>: The lookup table acting as the LLM's behavioral brain.</li>
+            <li><code>app.py</code>: The Streamlit GUI for analyzing output graphs and geographical spread.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">1</span> Prerequisites</h2>
+        <p>Before you begin, ensure your system has the following installed:</p>
+        <ul>
+            <li><strong>Java 17+</strong> (Required to compile and run MASON)</li>
+            <li><strong>Apache Maven 3.9+</strong> (For building the Java project)</li>
+            <li><strong>Conda / Anaconda</strong> (For isolating Python dependencies)</li>
+            <li><strong>Git</strong></li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">2</span> Clone and Setup MASON Dependencies</h2>
+        <p>The project relies on specific versions of MASON and GeoMason that aren't available on Maven Central. They must be installed locally.</p>
+        
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>git clone https://github.com/cruiseresearchgroup/disease-simulator-LLM_agent.git
+cd disease-simulator-LLM_agent
+
+# Install bundled JARs to your local .m2 repository
+mvn install:install-file -Dfile=libs/jts-1.13.jar -DgroupId=com.vividsolutions -DartifactId=jts -Dversion=1.13 -Dpackaging=jar
+mvn install:install-file -Dfile=libs/geomason-1.5.jar -DgroupId=edu.gmu.cs -DartifactId=geomason -Dversion=1.5 -Dpackaging=jar
+mvn install:install-file -Dfile=libs/mason-19.jar -DgroupId=edu.gmu.cs -DartifactId=mason -Dversion=19 -Dpackaging=jar
+mvn install:install-file -Dfile=libs/mason-tools-1.0.jar -DgroupId=edu.gmu.cs -DartifactId=mason-tools -Dversion=1.0 -Dpackaging=jar</code></pre>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">3</span> Compile the Java Backend</h2>
+        <p>Build the "fat JAR" containing all dependencies using the Maven Assembly Plugin.</p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Compile the simulation engine
+mvn assembly:single</code></pre>
+        <p>This creates the executable file: <span class="inline-code">target/vanilla-0.1-jar-with-dependencies.jar</span>.</p>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">4</span> Run the Simulation</h2>
+        <p>The simulation uses <span class="inline-code">run.bat</span> (Windows) or <span class="inline-code">run.sh</span> (Mac/Linux).</p>
+        
+        <div class="alert">
+            <span class="alert-title">Windows Path Warning</span>
+            GeoMason throws a <span class="inline-code">ShapeFileImporter</span> error if your project path contains spaces (e.g., "NEW PROJECTS"). If you encounter this, use the <span class="inline-code">subst</span> workaround below to map the folder to a virtual drive letter.
+        </div>
+
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Fix spaces in path (Windows Only)
+subst X: "C:\path\to\disease-simulator-LLM_agent"
+X:
+
+# Run a 30-day simulation with prefix "atl-test"
+.\run.bat atl-test 30</code></pre>
+        <p>Outputs are generated in <span class="inline-code">logs/atl-test/</span>, including <span class="inline-code">DiseaseReports.tsv</span> and spatial graphs.</p>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">5</span> Set Up the Python GUI Environment</h2>
+        <p>Create a fresh Conda environment for the Streamlit dashboard.</p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>conda create -n disease-sim-gui python=3.10 geopandas pyproj geopy numpy pandas scipy scikit-learn -c conda-forge -y
+conda activate disease-sim-gui
+
+# Install UI specific packages
+pip install "streamlit>=1.18.0" folium streamlit-folium "altair<5" overpass</code></pre>
+    </div>
+
+    <div class="card">
+        <h2><span class="step-number">6</span> Launch the Interactive Dashboard</h2>
+        <p>Start the Streamlit server to visualize your generated simulation data.</p>
+        <pre><button class="copy-btn" onclick="copyCode(this)">Copy</button><code># Ensure you are still in the project root directory
+streamlit run gui/app.py</code></pre>
+        <p>The dashboard will automatically open in your browser at <strong>http://localhost:8501</strong>.</p>
+    </div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+    const code = btn.nextElementSibling.innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = 'Copied!';
+        btn.style.background = 'var(--secondary)';
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = 'var(--primary)';
+        }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>
